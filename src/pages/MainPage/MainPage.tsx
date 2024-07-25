@@ -7,22 +7,41 @@ import ChatFooter from '../../components/ChatFooter/ChatFooter'
 import NavGroupButton from '../../components/NavGroupButton/NavGroupButton'
 import { useAppDispatch, useAppSelector } from '../../hooks/reduxTs'
 import { fetchUser } from '../../store/UserSlice'
-import { fetchChannels, fetchMessages } from '../../store/ChannelSlice'
+import { fetchChannels, fetchMessages, getMessage } from '../../store/ChannelSlice'
 import { IChannel } from '../../commonTypes'
+import echo from '../../utils/echo'
 
 
 function MainPage() {
     const dispatch = useAppDispatch();
     const userName = useAppSelector(state => state.user.name);
     const channels = useAppSelector(state => state.channels.channels)
-    const [activeChatId, setActiveChatId] = useState<number>();
+    const [activeChatId, setActiveChatId] = useState<number>(-1);
 
     useEffect(() => {
         dispatch(fetchUser());
         dispatch(fetchChannels());
-    }, [])
+    }, []);
 
-    console.log(channels);
+    useEffect(() => {
+        channels.forEach(channel => {
+            console.log(channel);
+            echo.channel(`chat_${channel.id}`)
+                .listen('.store_message', (event: any) => {
+                    console.log(event);
+                    dispatch(getMessage(event));
+                });
+        });
+
+        return () => {
+            channels.forEach(channel => {
+                echo.leave(`chat_${channel.id}`);
+            });
+        };
+    }, [channels])
+
+
+    // console.log(channels);
     // console.log(activeChat);
     const onChatClickHandler = (id: number) => {
         dispatch(fetchMessages(id));
@@ -49,7 +68,7 @@ function MainPage() {
                         </div>
                         <button>CHAT +</button>
                     </div>
-                    <MiniChat channels={channels} onChatClickHandler={onChatClickHandler} />
+                    <MiniChat channels={channels} onChatClickHandler={onChatClickHandler} currentChannel={activeChatId} />
                 </div>
                 <div className='min-w-[40%] border-[1px] border-[#E1E2FF] rounded-xl min-h-[80vh]'>
                     {activeChatId &&

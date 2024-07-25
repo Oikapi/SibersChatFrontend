@@ -4,10 +4,11 @@ import { IChannel } from '../../commonTypes'
 
 type MiniChatProps = {
     channels: IChannel[],
-    onChatClickHandler: (id: number) => void
+    onChatClickHandler: (id: number) => void,
+    currentChannel: number
 }
 
-function MiniChat({ channels, onChatClickHandler }: MiniChatProps) {
+function MiniChat({ channels, onChatClickHandler, currentChannel }: MiniChatProps) {
 
 
     return (
@@ -16,10 +17,10 @@ function MiniChat({ channels, onChatClickHandler }: MiniChatProps) {
                 <button
                     key={el.id}
                     onClick={() => onChatClickHandler(el.id)}
-                    className='flex flex-row items-center justify-between shadow-pink rounded-lg p-4 w-full'>
+                    className={`flex flex-row items-center justify-between rounded-lg p-4 w-full ${el.id == currentChannel ? "shadow-pink" : ""}`}>
                     <div>
                         <p>{el.name}</p>
-                        <p>Pesquisar chat</p>
+                        {/* <p>Pesquisar chat</p> */}
                     </div>
                     <div className='w-6 rounded-full bg-[#E1E2FF] text-[#5D5FEF] flex justify-center'>
                         1

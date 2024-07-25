@@ -4,6 +4,11 @@ export type userLoginData = {
     password : string
 }
 
+export interface IUser {
+    name : string,
+}
+
+
 export interface IMessage {
     id : number,
     user : {
@@ -12,6 +17,10 @@ export interface IMessage {
     },
     message : string,
     createdAt : Date
+}
+
+export interface IMessageWChannelId extends IMessage{
+    channel_id : number
 }
 
 export interface IRawMessage {
@@ -29,7 +38,8 @@ export interface IRawMessage {
 export interface IChannel  {
     id : number,
     name : string,
-    messages : IMessage[]
+    messages : IMessage[],
+    members : IUser[] | null
 }
 
 // export type {userLoginData}

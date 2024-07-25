@@ -3,6 +3,7 @@ import instance from "../services/axiosInstance";
 import axios from "axios";
 
 interface userData {
+    id : number | null,
     name :string | null,
     email : string | null,
 }
@@ -14,6 +15,7 @@ interface initialStateType extends userData  {
 
 
 const initialState:initialStateType = {
+    id : null,
     name: null,
     email: null,
     status: null,
@@ -26,6 +28,7 @@ export const fetchUser = createAsyncThunk<userData, undefined, {rejectValue : st
         try{
             const response = await instance.get('http://127.0.0.1:8000/api/user');
             return {
+                id : response.data.id,
                 name : response.data.name,
                 email : response.data.email
             }
@@ -53,6 +56,7 @@ const userSlice = createSlice({
         })
         .addCase(fetchUser.fulfilled, (state, action) => {
             console.log(action);
+            state.id = action.payload.id;
             state.name = action.payload.name;
             state.email = action.payload.email;
             state.status = 'succeeded';
