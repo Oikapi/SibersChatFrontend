@@ -3,8 +3,6 @@ import Pusher from 'pusher-js';
 
 window.Pusher = Pusher;
 
-console.log(import.meta.env)
-
 const echo = new Echo({
     broadcaster: 'pusher',
     key: import.meta.env.VITE_APP_PUSHER_KEY,

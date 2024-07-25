@@ -1,16 +1,29 @@
-import { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { Dialog, DialogBackdrop, DialogPanel, DialogTitle } from '@headlessui/react'
-import { IChannel, IUser, userLoginData } from '../../commonTypes'
-import deleteIcon from "../../assets/icons/deleteIcon.svg"
+import { useAppDispatch, useAppSelector } from '../../hooks/reduxTs'
+import { debounce } from 'lodash';
+import { searchPeople } from '../../store/PeopleSlice';
 
-type chatSettingsModalProps = {
+
+type findPeopleModalProps = {
     isOpen: boolean,
     setOpen: () => void,
-    channel: IChannel,
-    members: IUser[] | null
 }
 
-export default function ChatSettingsModal({ isOpen, setOpen, channel, members }: chatSettingsModalProps) {
+
+function FindPeopleModal({ isOpen, setOpen }: findPeopleModalProps) {
+    const dispatch = useAppDispatch();
+    const people = useAppSelector(state => state.people.people);
+    const [query, setQuery] = useState("");
+
+    const debouncedSearch = debounce(() => {
+        dispatch(searchPeople(query));
+    }, 500)
+
+    useEffect(() => {
+        debouncedSearch();
+    }, [query]);
+
 
     return (
         <Dialog open={isOpen} onClose={setOpen} className="relative z-10">
@@ -27,27 +40,42 @@ export default function ChatSettingsModal({ isOpen, setOpen, channel, members }:
                     >
                         <div className="bg-white px-4 pb-4 pt-5 sm:p-6 sm:pb-4">
                             <div className="sm:flex sm:items-start">
+                                <div className="mx-auto flex h-12 w-12 flex-shrink-0 items-center justify-center rounded-full bg-red-100 sm:mx-0 sm:h-10 sm:w-10">
+                                </div>
                                 <div className="mt-3 text-center sm:ml-4 sm:mt-0 sm:text-left w-full">
                                     <DialogTitle as="h3" className="text-base font-semibold leading-6 text-gray-900">
-                                        <p className='text-lg'>
-                                            Канал : {channel.name}
-                                        </p>
+                                        {/* {channel.name} */}
+                                        Создать новый канал
                                     </DialogTitle>
                                     <div className="mt-2">
-                                        <p className='text-lg'>
-                                            Участники:
-                                        </p>
+                                        <label className='flex flex-col gap-2   ' >
 
-                                        {members?.map(el =>
-                                            <div className='flex items-center justify-between mb-2'>
-                                                <span className="text-sm text-gray-500">
-                                                    {el.name}
-                                                </span>
-                                                <button>
-                                                    <img src={deleteIcon} />
-                                                </button>
+                                            Введите имя пользователя
+                                            <input
+                                                onChange={(e) => setQuery(e.target.value)}
+                                                placeholder='Начните печатать'
+                                                className='border-[1px]'
+                                            />
+                                        </label>
+                                        <div>
+                                            <p>
+                                                Пользователи:
+                                            </p>
+                                            <div className='h-64 overflow-y-scroll w-full'>
+                                                {
+                                                    people.map(el =>
+                                                        <p>
+                                                            {el.name}
+                                                        </p>
+                                                    )
+                                                }
                                             </div>
-                                        )}
+                                        </div>
+                                        {/* {members?.map(el =>
+                                            <p className="text-sm text-gray-500">
+                                                {el.name}
+                                            </p>
+                                        )} */}
                                     </div>
                                 </div>
                             </div>
@@ -75,3 +103,5 @@ export default function ChatSettingsModal({ isOpen, setOpen, channel, members }:
         </Dialog>
     )
 }
+
+export default FindPeopleModal

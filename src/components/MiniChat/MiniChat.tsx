@@ -17,7 +17,7 @@ function MiniChat({ channels, onChatClickHandler, currentChannel }: MiniChatProp
                 <button
                     key={el.id}
                     onClick={() => onChatClickHandler(el.id)}
-                    className={`flex flex-row items-center justify-between rounded-lg p-4 w-full ${el.id == currentChannel ? "shadow-pink" : ""}`}>
+                    className={`flex flex-row border-[1px] mb-4 border-[#e5e7eb] items-center justify-between rounded-lg p-4 w-full  ${el.id == currentChannel ? "shadow-pink" : ""}`}>
                     <div>
                         <p>{el.name}</p>
                         {/* <p>Pesquisar chat</p> */}

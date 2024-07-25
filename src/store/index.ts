@@ -1,13 +1,14 @@
 import { configureStore,Store } from '@reduxjs/toolkit';
 import authReducer from './AuthSlice';
 import userReducer from './UserSlice'
-import channelsReducer from './ChannelSlice'
-
+import channelsReducer from './ChannelSlice' 
+import peopleReducer from './PeopleSlice';
 const store = configureStore({
   reducer: {
     auth: authReducer,
     user: userReducer,
-    channels : channelsReducer
+    channels : channelsReducer,
+    people : peopleReducer
   },
 });
 

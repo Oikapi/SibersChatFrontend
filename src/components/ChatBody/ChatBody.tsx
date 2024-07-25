@@ -20,7 +20,7 @@ type chatBodyProps = {
 function ChatBody({ chat }: chatBodyProps) {
 
     const [messages, setMessages] = useState<message[]>();
-    const [isSettingsOpen, setSettingsOpen] = useState<boolean>(true);
+    const [isSettingsOpen, setSettingsOpen] = useState<boolean>(false);
     const [inputValue, setInputValue] = useState("");
     const userId = useAppSelector(state => state.user.id);
     const dispatch = useAppDispatch();
@@ -39,6 +39,7 @@ function ChatBody({ chat }: chatBodyProps) {
                 message: inputValue
             }
         ))
+        setInputValue("");
     }
 
     useEffect(() => {
@@ -75,7 +76,7 @@ function ChatBody({ chat }: chatBodyProps) {
                             <input
                                 value={inputValue}
                                 onChange={e => setInputValue(e.target.value)}
-                                className="rounded-xl py-2 pl-3 pr-10 w-full border border-[#A5A6F6]  bg-white focus:outline-none text-gray-200 focus:shadow-md transition duration-300 ease-in" type="text" placeholder="Aa" />
+                                className="rounded-xl py-2 pl-3 pr-10 w-full border border-[#A5A6F6]  bg-white focus:outline-none text-black focus:shadow-md transition duration-300 ease-in" type="text" placeholder="Aa" />
                             <button
                                 onClick={onSendClickHandler}
                                 type="button" className="absolute top-0 right-0 mt-2 mr-3 flex flex-shrink-0 focus:outline-none bg-[#5D5FEF] hover:text-blue-700 w-6 h-6 rounded-md p-1">

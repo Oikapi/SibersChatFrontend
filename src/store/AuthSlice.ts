@@ -52,8 +52,7 @@ const authSlice = createSlice({
     },
     removeToken: (state) => {
       state.isAuthenticated = false;
-      // state.token = null;
-      // Cookies.remove('authToken');
+      Cookies.remove('authToken');
     },
   },
   extraReducers: (builder) => {
